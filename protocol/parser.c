@@ -220,6 +220,11 @@ BOOL ProcessStreamByte(unsigned char byte, ProcessPacketFunc processPacket)
     else if (state == LEN6 && byte == '\n'){
         state = RecvData;
         SetDataLen();
+        if (CurrDataRecvd == 0 && CurrDataLen == 0){
+            state = Ready0;
+            Packet *newPacket = CreatePacket();
+            processPacket(newPacket);
+        }
     }
     
     // receiving data
@@ -231,7 +236,7 @@ BOOL ProcessStreamByte(unsigned char byte, ProcessPacketFunc processPacket)
             processPacket(newPacket);
         }
     }
-    if (state == RecvData && CurrDataRecvd == CurrDataLen){
+    else if (state == RecvData && CurrDataRecvd == CurrDataLen){
         state = Ready0;
         Packet *newPacket = CreatePacket();
         processPacket(newPacket);
