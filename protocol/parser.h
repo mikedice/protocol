@@ -45,12 +45,20 @@ LEN: 0<newline>
 #ifndef FALSE
 #define FALSE 0
 #endif
-    
+
+/*
 // Data structure used to hold command and data
 typedef struct {
     unsigned char Sig[MAX_PACKETSIG-1];
     unsigned char Command[MAX_PACKETCOMMAND-1];
     unsigned char Data[MAX_PACKETDATA];
+    unsigned int DataLength;
+} Packet;
+*/
+typedef struct {
+    unsigned char *Sig;
+    unsigned char *Command;
+    unsigned char *Data;
     unsigned int DataLength;
 } Packet;
     

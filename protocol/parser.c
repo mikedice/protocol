@@ -11,7 +11,6 @@
 #include <string.h>
 #include "parser.h"
 
-#define MAX_PACKETLEN 16
 
 // Keep track of the thing we are parsing
 enum parserState{
@@ -59,7 +58,42 @@ unsigned int PacketSigIdx = 0;
 unsigned int PacketCommandIdx = 0;
 unsigned int PacketDataIdx = 0;
 unsigned int PacketLenIdx = 0;
+Packet resultPacket;
 
+
+Packet* CreatePacket(){
+    resultPacket.Sig = PacketSig;
+    resultPacket.Sig[PacketSigIdx] = '\0';
+    
+    resultPacket.Command = PacketCommand;
+    resultPacket.Command[PacketCommandIdx] = '\0';
+    
+    PacketLen[PacketLenIdx] = '\0';
+    resultPacket.DataLength = atoi((const char*)PacketLen);
+    
+    if (resultPacket.DataLength > 0)
+    {
+        resultPacket.Data = PacketData;
+    }
+    else
+    {
+        resultPacket.Data = 0;
+    }
+
+    return &resultPacket;
+}
+
+void DeletePacket(Packet* packet)
+{
+    // TODO
+}
+
+/*
+ The heap has to be avoided on the arduino because that device has
+ almost no heap. Deprecated these functions and replaced with
+ ones that only use static data
+ 
+ 
 // When parsing of a packet is done this thing constructs a packet
 Packet* CreatePacket()
 {
@@ -83,6 +117,7 @@ void DeletePacket(Packet *packet)
         free(packet);
     }
 }
+*/
 
 void SetDataLen(){
     PacketLen[PacketLenIdx] = '\0';
