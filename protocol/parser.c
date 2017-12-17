@@ -11,6 +11,11 @@
 #include <string.h>
 #include "parser.h"
 
+/*
+ The heap has to be avoided on the arduino because that device has
+ almost no heap. Deprecated these functions and replaced with
+ ones that only use static data
+ */
 
 // Keep track of the thing we are parsing
 enum parserState{
@@ -60,7 +65,6 @@ unsigned int PacketDataIdx = 0;
 unsigned int PacketLenIdx = 0;
 Packet resultPacket;
 
-
 Packet* CreatePacket(){
     resultPacket.Sig = PacketSig;
     resultPacket.Sig[PacketSigIdx] = '\0';
@@ -87,37 +91,6 @@ void DeletePacket(Packet* packet)
 {
     // TODO
 }
-
-/*
- The heap has to be avoided on the arduino because that device has
- almost no heap. Deprecated these functions and replaced with
- ones that only use static data
- 
- 
-// When parsing of a packet is done this thing constructs a packet
-Packet* CreatePacket()
-{
-    Packet *packet = (Packet*)malloc(sizeof(Packet));
-    memcpy(packet->Sig, PacketSig, PacketSigIdx);
-    packet->Sig[PacketSigIdx] = '\0';
-    
-    memcpy(packet->Command, PacketCommand, PacketCommandIdx);
-    packet->Command[PacketCommandIdx] = '\0';
-    
-    memcpy(packet->Data, PacketData, PacketDataIdx);
-    
-    PacketLen[PacketLenIdx] = '\0';
-    packet->DataLength = atoi((const char*)PacketLen);
-    return packet;
-}
-
-void DeletePacket(Packet *packet)
-{
-    if (packet != NULL){
-        free(packet);
-    }
-}
-*/
 
 void SetDataLen(){
     PacketLen[PacketLenIdx] = '\0';
